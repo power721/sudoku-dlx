@@ -63,17 +63,17 @@ public class Sudoku extends JPanel
 		add(reset);
 
 		clean.setBounds(265, 300, 75, 25);
-		clean.addActionListener(new cleanAL());
+		clean.addActionListener(new CleanAL());
 		add(clean);
 
 		left.setVisible(false);
 		left.setBounds(170, 330, 50, 25);
-		left.addActionListener(new prevAL());
+		left.addActionListener(new PrevAL());
 		add(left);
 		
 		right.setVisible(false);
 		right.setBounds(230, 330, 50, 25);
-		right.addActionListener(new nextAL());
+		right.addActionListener(new NextAL());
 		add(right);
 
 		JScrollPane jsp = new JScrollPane(info);
@@ -221,7 +221,7 @@ public class Sudoku extends JPanel
 		}
 	}
 
-	class cleanAL implements ActionListener
+	class CleanAL implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -243,7 +243,7 @@ public class Sudoku extends JPanel
 		}
 	}
 	
-	class prevAL implements ActionListener
+	class PrevAL implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -257,7 +257,7 @@ public class Sudoku extends JPanel
 		}
 	}
 
-	class nextAL implements ActionListener
+	class NextAL implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
