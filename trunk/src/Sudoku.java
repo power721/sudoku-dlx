@@ -18,8 +18,11 @@ public class Sudoku extends JPanel
 	private int data[][] = new int[height][width];
 	private String infoStr = "";
 
-	JButton solve = new JButton("Solve"), reset = new JButton("Reset"), clean = new JButton("Clean");
-	BasicArrowButton right = new BasicArrowButton(BasicArrowButton.EAST), left = new BasicArrowButton(BasicArrowButton.WEST);
+	JButton solve = new JButton("Solve"), 
+			reset = new JButton("Reset"), 
+			clean = new JButton("Clean");
+	BasicArrowButton right = new BasicArrowButton(BasicArrowButton.EAST), 
+					 left  = new BasicArrowButton(BasicArrowButton.WEST);
 	JTextField sudokus[][] = new JTextField[height][width];
 	JTextPane info = new JTextPane();
 
@@ -102,12 +105,12 @@ public class Sudoku extends JPanel
 		int n = 9;
 		long startTime = System.currentTimeMillis();
 		DLX dlx = new DLX(n * n * n + 1, 4 * n * n);
-		dlx.setNum(5);
+		dlx.setMaxSolution(5);
 		dlx.solve(data);
 		solutions = dlx.getSolutions();
 
 		if (solutions.size() > 1)
-			infoStr += "Find multi solutions.\n";
+			infoStr += "Find multi(" + solutions.size() + ") solutions.\n";
 		else if (solutions.size() > 0)
 			infoStr += "Find one solution.\n";
 		else
@@ -178,17 +181,17 @@ public class Sudoku extends JPanel
 	public static void main(String[] args)
 	{
 		int data[][] = { 
-				{ 8, 0, 0, 0, 0, 0, 0, 0, 0 }, 
-				{ 0, 0, 3, 6, 0, 0, 0, 0, 0 }, 
-				{ 0, 7, 0, 0, 9, 0, 2, 0, 0 },
+				{ 8, 0, 0,  0, 0, 0,  0, 0, 0 }, 
+				{ 0, 0, 3,  6, 0, 0,  0, 0, 0 }, 
+				{ 0, 7, 0,  0, 9, 0,  2, 0, 0 },
 
-				{ 0, 5, 0, 0, 0, 7, 0, 0, 0 }, 
-				{ 0, 0, 0, 0, 4, 5, 7, 0, 0 }, 
-				{ 0, 0, 0, 1, 0, 0, 0, 3, 0 },
+				{ 0, 5, 0,  0, 0, 7,  0, 0, 0 }, 
+				{ 0, 0, 0,  0, 4, 5,  7, 0, 0 }, 
+				{ 0, 0, 0,  1, 0, 0,  0, 3, 0 },
 		
-				{ 0, 0, 1, 0, 0, 0, 0, 6, 8 }, 
-				{ 0, 0, 8, 5, 0, 0, 0, 1, 0 }, 
-				{ 0, 9, 0, 0, 0, 0, 4, 0, 0 }, 
+				{ 0, 0, 1,  0, 0, 0,  0, 6, 8 }, 
+				{ 0, 0, 8,  5, 0, 0,  0, 1, 0 }, 
+				{ 0, 9, 0,  0, 0, 0,  4, 0, 0 }, 
 			};
 		Sudoku sudoku = new Sudoku();
 		sudoku.reset(data);
@@ -262,7 +265,7 @@ public class Sudoku extends JPanel
 			if(size > 0)
 			{
 				solutionIdx = (solutionIdx + 1) % size;
-				infoStr += "The " + (solutionIdx+1) + "th solution.\n";
+				infoStr += "The " + (solutionIdx + 1) + "th solution.\n";
 				update();
 			}
 		}
