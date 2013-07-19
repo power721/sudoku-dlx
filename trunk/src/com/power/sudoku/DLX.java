@@ -1,3 +1,4 @@
+package com.power.sudoku;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,16 +14,11 @@ public class DLX
 	DLXNode head;
 
 	private int n;
-	private int maxSolution = 2;
+	private int num = 2;
 	private int size[] = new int[COL];
 	int data[][] = new int[9][9];
 	List<int[][]> solutions;
 
-	/**
-	 * constructor
-	 * @param r the rows of Dancing Link
-	 * @param c the cols of Dancing Link
-	 */
 	public DLX(int r, int c)
 	{
 		n = m * m;
@@ -48,12 +44,7 @@ public class DLX
 		}
 	}
 
-	/**
-	 * add a Node at the row r and col c
-	 * @param r
-	 * @param c
-	 */
-	void addNode(int r, int c)
+	public void addNode(int r, int c)
 	{
 		DLXNode p = new DLXNode(r, c);
 		p.R = row[r];
@@ -65,37 +56,21 @@ public class DLX
 		++size[c];
 	}
 
-	/**
-	 * add four Node for possible value at (x, y)
-	 * @param x
-	 * @param y
-	 * @param val possible value at (x, y)
-	 */
-	void addNode(int x, int y, int val)
+	public void addNode(int i, int j, int k)
 	{
-		int r = (x * n + y) * n + val;
-		addNode(r, x * n + val - 1);
-		addNode(r, n * n + y * n + val - 1);
-		addNode(r, 2 * n * n + block(x, y) * n + val - 1);
-		addNode(r, 3 * n * n + x * n + y);
+		int r = (i * n + j) * n + k;
+		addNode(r, i * n + k - 1);
+		addNode(r, n * n + j * n + k - 1);
+		addNode(r, 2 * n * n + block(i, j) * n + k - 1);
+		addNode(r, 3 * n * n + i * n + j);
 	}
 
-	/**
-	 * get block id of sudoku cell at (x, y)
-	 * @param x
-	 * @param y
-	 * @return block id
-	 */
 	int block(int x, int y)
 	{
 		return x / m * m + y / m;
 	}
 
-	/**
-	 * cover the column c
-	 * @param c
-	 */
-	void cover(int c)
+	public void cover(int c)
 	{
 		if (c == N)
 			return;
@@ -117,11 +92,7 @@ public class DLX
 		}
 	}
 
-	/**
-	 * resume the column c
-	 * @param c
-	 */
-	void resume(int c)
+	public void resume(int c)
 	{
 		if (c == N)
 			return;
@@ -143,12 +114,7 @@ public class DLX
 		col[c].resumeLR();
 	}
 
-	/**
-	 * use backtrace to solve the problem
-	 * @param depth
-	 * @return true if find solution
-	 */
-	boolean solve(int depth)
+	public boolean solve(int depth)
 	{
 		if (head.L == head)
 		{
@@ -158,7 +124,7 @@ public class DLX
 					solution[i][j] = data[i][j];
 			solutions.add(solution);
 
-			if (solutions.size() >= maxSolution)
+			if (solutions.size() >= num)
 				return true;
 			return false;
 		}
@@ -197,21 +163,12 @@ public class DLX
 		return false;
 	}
 
-	/**
-	 * initialize data and solve
-	 * @param data
-	 * @return true if find solution
-	 */
 	public boolean solve(int data[][])
 	{
 		init(data);
 		return solve(0);
 	}
 
-	/**
-	 * use data arrays to initialize Dancing Link
-	 * @param data
-	 */
 	public void init(int data[][])
 	{
 		solutions = new ArrayList<int[][]>();
@@ -230,28 +187,16 @@ public class DLX
 			}
 	}
 
-	/**
-	 * set max solution limit number 
-	 * @param maxSolution
-	 */
-	public void setMaxSolution(int maxSolution)
+	public void setNum(int num)
 	{
-		this.maxSolution = maxSolution;
+		this.num = num;
 	}
 
-	/**
-	 * get max solution limit number
-	 * @return int
-	 */
-	public int getMaxSolution()
+	public int getNum()
 	{
-		return maxSolution;
+		return num;
 	}
 
-	/**
-	 * get the solutions List
-	 * @return List<int[][]> of solutions
-	 */
 	public List<int[][]> getSolutions()
 	{
 		return solutions;
@@ -263,10 +208,25 @@ class DLXNode
 	int r,c;
 	DLXNode U,D,L,R;
 	
+	DLXNode()
+	{
+		r = c = 0;
+	}
+	
 	DLXNode(int r, int c)
 	{
 		this.r = r;
 		this.c = c;
+	}
+
+	DLXNode(int r, int c, DLXNode U, DLXNode D, DLXNode L, DLXNode R)
+	{
+		this.r = r;
+		this.c = c;
+		this.U = U;
+		this.D = D;
+		this.L = L;
+		this.R = R;
 	}
 
 	public void delLR()
