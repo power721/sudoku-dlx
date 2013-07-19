@@ -1,3 +1,5 @@
+package com.power.sudoku;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -18,11 +20,8 @@ public class Sudoku extends JPanel
 	private int data[][] = new int[height][width];
 	private String infoStr = "";
 
-	JButton solve = new JButton("Solve"), 
-			reset = new JButton("Reset"), 
-			clean = new JButton("Clean");
-	BasicArrowButton right = new BasicArrowButton(BasicArrowButton.EAST), 
-					 left  = new BasicArrowButton(BasicArrowButton.WEST);
+	JButton solve = new JButton("Solve"), reset = new JButton("Reset"), clean = new JButton("Clean");
+	BasicArrowButton right = new BasicArrowButton(BasicArrowButton.EAST), left = new BasicArrowButton(BasicArrowButton.WEST);
 	JTextField sudokus[][] = new JTextField[height][width];
 	JTextPane info = new JTextPane();
 
@@ -40,14 +39,14 @@ public class Sudoku extends JPanel
 				jp.setLayout(null);
 				jp.setBounds(r * 95 + 5, c * 95 + 5, 95, 95);
 				jp.setBorder(new LineBorder(Color.black));
-				
+
 				for (int x = 0; x < 3; ++x)
 					for (int y = 0; y < 3; ++y)
 					{
 						int j = r * 3 + x, i = c * 3 + y;
 						sudokus[i][j] = new JTextField();
 						sudokus[i][j].setBounds(30 * x + 5, 30 * y + 5, 25, 25);
-						sudokus[i][j].setDocument(new NumberLenghtLimitedDmt(1));
+						sudokus[i][j].setDocument(new NumberLenghtLimitedDmt());
 						jp.add(sudokus[i][j]);
 					}
 				add(jp);
@@ -63,17 +62,17 @@ public class Sudoku extends JPanel
 		add(reset);
 
 		clean.setBounds(265, 300, 75, 25);
-		clean.addActionListener(new CleanAL());
+		clean.addActionListener(new cleanAL());
 		add(clean);
 
 		left.setVisible(false);
 		left.setBounds(170, 330, 50, 25);
-		left.addActionListener(new PrevAL());
+		left.addActionListener(new prevAL());
 		add(left);
-		
+
 		right.setVisible(false);
 		right.setBounds(230, 330, 50, 25);
-		right.addActionListener(new NextAL());
+		right.addActionListener(new nextAL());
 		add(right);
 
 		JScrollPane jsp = new JScrollPane(info);
@@ -105,12 +104,12 @@ public class Sudoku extends JPanel
 		int n = 9;
 		long startTime = System.currentTimeMillis();
 		DLX dlx = new DLX(n * n * n + 1, 4 * n * n);
-		dlx.setMaxSolution(5);
+		dlx.setNum(5);
 		dlx.solve(data);
 		solutions = dlx.getSolutions();
 
 		if (solutions.size() > 1)
-			infoStr += "Find multi(" + solutions.size() + ") solutions.\n";
+			infoStr += "Find multi solutions.\n";
 		else if (solutions.size() > 0)
 			infoStr += "Find one solution.\n";
 		else
@@ -180,19 +179,11 @@ public class Sudoku extends JPanel
 
 	public static void main(String[] args)
 	{
-		int data[][] = { 
-				{ 8, 0, 0,  0, 0, 0,  0, 0, 0 }, 
-				{ 0, 0, 3,  6, 0, 0,  0, 0, 0 }, 
-				{ 0, 7, 0,  0, 9, 0,  2, 0, 0 },
+		int data[][] = { { 8, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 3, 6, 0, 0, 0, 0, 0 }, { 0, 7, 0, 0, 9, 0, 2, 0, 0 },
 
-				{ 0, 5, 0,  0, 0, 7,  0, 0, 0 }, 
-				{ 0, 0, 0,  0, 4, 5,  7, 0, 0 }, 
-				{ 0, 0, 0,  1, 0, 0,  0, 3, 0 },
-		
-				{ 0, 0, 1,  0, 0, 0,  0, 6, 8 }, 
-				{ 0, 0, 8,  5, 0, 0,  0, 1, 0 }, 
-				{ 0, 9, 0,  0, 0, 0,  4, 0, 0 }, 
-			};
+		{ 0, 5, 0, 0, 0, 7, 0, 0, 0 }, { 0, 0, 0, 0, 4, 5, 7, 0, 0 }, { 0, 0, 0, 1, 0, 0, 0, 3, 0 },
+
+		{ 0, 0, 1, 0, 0, 0, 0, 6, 8 }, { 0, 0, 8, 5, 0, 0, 0, 1, 0 }, { 0, 9, 0, 0, 0, 0, 4, 0, 0 }, };
 		Sudoku sudoku = new Sudoku();
 		sudoku.reset(data);
 		inFrame(sudoku, 450, 400);
@@ -221,7 +212,7 @@ public class Sudoku extends JPanel
 		}
 	}
 
-	class CleanAL implements ActionListener
+	class cleanAL implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -242,27 +233,27 @@ public class Sudoku extends JPanel
 			}
 		}
 	}
-	
-	class PrevAL implements ActionListener
+
+	class prevAL implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			int size = solutions.size();
-			if(size > 0)
+			if (size > 0)
 			{
 				solutionIdx = (solutionIdx - 1 + size) % size;
-				infoStr += "The " + (solutionIdx+1) + "th solution.\n";
+				infoStr += "The " + (solutionIdx + 1) + "th solution.\n";
 				update();
 			}
 		}
 	}
 
-	class NextAL implements ActionListener
+	class nextAL implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			int size = solutions.size();
-			if(size > 0)
+			if (size > 0)
 			{
 				solutionIdx = (solutionIdx + 1) % size;
 				infoStr += "The " + (solutionIdx + 1) + "th solution.\n";
@@ -277,12 +268,10 @@ public class Sudoku extends JPanel
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private int limit;
 
-		public NumberLenghtLimitedDmt(int limit)
+		public NumberLenghtLimitedDmt()
 		{
 			super();
-			this.limit = limit;
 		}
 
 		public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException
@@ -291,18 +280,11 @@ public class Sudoku extends JPanel
 			{
 				return;
 			}
-			if ((getLength() + str.length()) <= limit)
+			char[] upper = str.toCharArray();
+			if (upper[0] > '0' && upper[0] <= '9')
 			{
-				char[] upper = str.toCharArray();
-				int length = 0;
-				for (int i = 0; i < upper.length; i++)
-				{
-					if (upper[i] >= '0' && upper[i] <= '9')
-					{
-						upper[length++] = upper[i];
-					}
-				}
-				super.insertString(offset, new String(upper, 0, length), attr);
+				super.remove(0, getLength());
+				super.insertString(0, new String(upper, 0, 1), attr);
 			}
 		}
 	}
